@@ -20,7 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('companies', CompanyController::class);
-Route::resource('employees', EmployeeController::class);
-
-
+// Route::resource('companies', CompanyController::class);
+// Route::resource('employees', EmployeeController::class);
