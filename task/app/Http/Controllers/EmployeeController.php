@@ -9,6 +9,10 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Exception;
+use App\Events\EmployeeCreated;
+use App\Notifications\WelcomeEmployee;
+use Illuminate\Support\Facades\Hash;
+use Notification;
 
 class EmployeeController extends Controller
 {
@@ -39,30 +43,42 @@ class EmployeeController extends Controller
         $employee->name = $employee_info['name'];
         $employee->email = $employee_info['email'];
         $employee->company_id = $employee_info['company'];
-        $employee->password = $employee_info['password'];
+        $employee->password = Hash::make($employee_info['password']);
 
         if ($image) {
             $image_name = time() . '.' . $image->extension();
             $image->move(public_path('images/employees'), $image_name);
             $employee->image = $image_name;
         }
-
         $employee->save();
+        $employeee = [
+            'greeting' =>'Hi our employee',
+            'actionurl' => '/',
+            'line' =>'Thank you for joining our company!',
+        ];
+
+        $employee->notify(new WelcomeEmployee($employeee));
+
+        dd('done');
+
+        // event(new EmployeeCreated($employee));
 
         return to_route('employees.index');
     }
     public function show($id)
     {
         $employee = Employee::findOrFail($id);
+
         return view("employees.show", ['employee' => $employee]);
     }
-
 
     public function edit($id)
     {
         $employee = Employee::all();
+
         $companies = Company::all();
-        return view("employees.edit",['companies' => $companies], compact('id', 'employee'));
+
+        return view("employees.edit", ['companies' => $companies], compact('id', 'employee'));
     }
 
     public function update($id)
@@ -75,12 +91,12 @@ class EmployeeController extends Controller
 
         $image =  request()->image;
 
-            $employee->image =  $image;
-            $employee->name = request()->input('name');
-            $employee->email = request()->input('email');
-            $employee->password = request()->input('password');
-            $employee->company_id = request()->input('company');
-            $employee->save();
+        $employee->image =  $image;
+        $employee->name = request()->input('name');
+        $employee->email = request()->input('email');
+        $employee->password = request()->input('password');
+        $employee->company_id = request()->input('company');
+        $employee->save();
 
         return redirect()->route('employees.index');
     }
@@ -90,8 +106,8 @@ class EmployeeController extends Controller
         try {
 
             $employee = Employee::findOrFail($id);
-            
-             $this->delete_image($employee->image);
+
+            $this->delete_image($employee->image);
 
             $employee->delete();
 
