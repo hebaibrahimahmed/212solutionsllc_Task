@@ -53,9 +53,9 @@ class EmployeeController extends Controller
         $employee->save();
 
 
-        $employee->notify(new WelcomeEmployee($employee));
+        // $employee->notify(new WelcomeEmployee($employee));
 
-        // event(new EmployeeCreated($employee));
+        event(new EmployeeCreated($employee));
 
         return to_route('employees.index');
     }
@@ -90,7 +90,7 @@ class EmployeeController extends Controller
             $image->move(public_path('images/employees'), $image_name);
             $employee->image = $image_name;
         }
-        
+
         $employee->name = request()->input('name');
         $employee->email = request()->input('email');
         $employee->password = bcrypt(request()->input('password'));

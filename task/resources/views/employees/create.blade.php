@@ -18,7 +18,8 @@ please submit your data
 
 @section('content')
 
-<h1> Create employee </h1>
+<div class="container" >
+
 <form method="POST" action="/employees/store" enctype="multipart/form-data">
     @method('post')
     @csrf
