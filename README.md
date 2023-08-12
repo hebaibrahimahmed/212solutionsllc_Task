@@ -1,0 +1,2 @@
+composer installl
+npm install
