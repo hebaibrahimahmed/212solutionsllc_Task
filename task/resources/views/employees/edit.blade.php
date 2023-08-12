@@ -17,7 +17,7 @@
 @section('content')
 
     <h3 class="text-center w-25 justfiy-content-center"> edit employee </h3>
-    <form method="POST" action="/employees/{{$id}}/update">
+    <form method="POST" action="/employees/{{$id}}/update" enctype="multipart/form-data">
         @method('post')
         @csrf
 

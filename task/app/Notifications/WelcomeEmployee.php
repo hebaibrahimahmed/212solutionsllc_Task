@@ -37,8 +37,6 @@ class WelcomeEmployee extends Notification
 
      public function toMail($notifiable)
      {
-        dd('Notification Sent');
-
          return (new MailMessage)
          ->greeting($this->employee['hello'])
          ->action('Explore',$this->employee['actionurl'] )

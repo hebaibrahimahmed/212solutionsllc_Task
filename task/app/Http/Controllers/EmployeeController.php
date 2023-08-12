@@ -51,15 +51,9 @@ class EmployeeController extends Controller
             $employee->image = $image_name;
         }
         $employee->save();
-        $employeee = [
-            'greeting' =>'Hi our employee',
-            'actionurl' => '/',
-            'line' =>'Thank you for joining our company!',
-        ];
 
-        $employee->notify(new WelcomeEmployee($employeee));
 
-        dd('done');
+        $employee->notify(new WelcomeEmployee($employee));
 
         // event(new EmployeeCreated($employee));
 
@@ -89,17 +83,23 @@ class EmployeeController extends Controller
 
         $this->delete_image($old_image);
 
-        $image =  request()->image;
+        $image = request()->file('image');
 
-        $employee->image =  $image;
+        if ($image) {
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/employees'), $image_name);
+            $employee->image = $image_name;
+        }
+        
         $employee->name = request()->input('name');
         $employee->email = request()->input('email');
-        $employee->password = request()->input('password');
+        $employee->password = bcrypt(request()->input('password'));
         $employee->company_id = request()->input('company');
         $employee->save();
 
         return redirect()->route('employees.index');
     }
+
 
     public function destroy($id)
     {
