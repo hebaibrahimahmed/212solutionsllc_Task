@@ -12,7 +12,6 @@ employee from Database
         <h5 class="card-title">{{$employee->name}}</h5>
         <p class="card-text">{{$employee->email}}</p>
         <p>Created At: {{ \Carbon\Carbon::parse($employee->created_at)->format('Y-m-d')}}</p>
-        <a href="{{route('employees.index')}}" class="btn btn-primary">All employees</a>
     </div>
 </div>
 @endsection

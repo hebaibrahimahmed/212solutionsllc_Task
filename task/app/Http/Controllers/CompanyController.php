@@ -12,8 +12,6 @@ use App\Models\Company;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-
-
 class CompanyController extends Controller
 {
     public function index()
@@ -36,23 +34,19 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $company_info = request()->all();
-        $logo = request()->logo;
+        $image = request()->logo;
         $company = new Company();
-        $company->name = $company_info['name'];
+        $company->name = $request->input('name');
+        $company->address = $request->input('address');
 
-        if ($logo) {
-            $logo_name = time() . '.' . $logo->extension();
-            $logo->move(public_path('images/companies'), $logo_name);
-            $company->logo = $logo_name;
+        if ($image) {
+            $image_name = time() . '.' . $image->extension();
+            $image->move(public_path('images/companies'), $image_name);
+            $company->logo = $image_name;
         }
 
         $company->save();
-
-        return response()->json([
-            'data' => [
-                'company' => $company,
-            ],
-        ]);
+        return to_route('employees.index');
     }
 
     /**

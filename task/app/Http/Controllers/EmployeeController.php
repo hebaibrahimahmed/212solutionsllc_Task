@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Company;
-use App\Http\Requests\StoreEmployeeRequest;
-use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Exception;
-use App\Events\EmployeeCreated;
-use App\Notifications\WelcomeEmployee;
 use Illuminate\Support\Facades\Hash;
-use Notification;
+use App\Events\UserRegisteredEvent;
+use Illuminate\Support\Facades\Mail;
+
+
 
 class EmployeeController extends Controller
 {
@@ -21,12 +20,6 @@ class EmployeeController extends Controller
         $employees = Employee::all();
         $companies = Company::all();
         return view('employees.index', ['employees' => $employees], ['companies' => $companies]);
-    }
-    public function create()
-    {
-        $companies = Company::all();
-
-        return view("employees.create", ['companies' => $companies]);
     }
 
     public function store(Request $request)
@@ -52,10 +45,7 @@ class EmployeeController extends Controller
         }
         $employee->save();
 
-
-        // $employee->notify(new WelcomeEmployee($employee));
-
-        event(new EmployeeCreated($employee));
+        event(new UserRegisteredEvent($employee));
 
         return to_route('employees.index');
     }

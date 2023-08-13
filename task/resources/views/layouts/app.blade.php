@@ -31,7 +31,12 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
 
-                    <a href="{{route('employees.index')}}" class="btn btn-primary">All employees</a>
+                    <a href="{{route('employees.index')}}" class="btn btn-primary m-2">All employees</a>
+                    <br> <br>
+                    <a  class="btn btn-warning m-2" data-toggle="modal" data-target="#createEmployeeModal">Create Employee</a>
+                        <br> <br>
+                        <a class="btn btn-primary m-2" data-toggle="modal" data-target="#addCompanyModal">Add Company</a>
+
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
